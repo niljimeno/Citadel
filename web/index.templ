@@ -1,8 +1,10 @@
 package web
 
-import "github.com/niljimeno/citadel/modules"
+import (
+    "github.com/niljimeno/citadel/models"
+)
 
-templ Search(results []modules.Result) {
+templ Search(results []models.Result) {
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -18,11 +20,16 @@ templ Search(results []modules.Result) {
                     <input type="submit" value="Submit">
     			</form>
                 <div id="results">
-                    <div class="result">
-                        <h2>Wiby</h2>
-                        <a href="https://wiby.me" target="_blank">wiby.me</a>
-                        <p>Cool search engine</p>
-                    </div>
+                    for _, result := range results {
+                        <div class="result">
+                            <h2>{ result.Name }</h2>
+                            <a href={ "https://" + result.Site }>{ result.Site }</a>
+                            <p>{ result.Desc }</p>
+                            for _, tag := range result.Tags {
+                                <span class="tag">{tag}</span>
+                            }
+                        </div>
+                    }
                 </div>
             </div>
         </main>
