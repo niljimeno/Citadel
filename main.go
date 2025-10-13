@@ -1,34 +1,24 @@
 package main
 
 import (
-	"bufio"
+	"context"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
-	"os"
+
+	"github.com/niljimeno/citadel/modules"
+	"github.com/niljimeno/citadel/web"
 )
 
-var page []byte
-
 func main() {
-	loadPage()
-	http.HandleFunc("/bar", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello")
+	fs := http.FileServer(http.Dir("./static"))
+	http.Handle("/", fs)
+
+	http.HandleFunc("/search/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("searching for ", r.URL.Query())
+		cmp := web.Search([]modules.Result{})
+		cmp.Render(context.Background(), w)
 	})
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
-}
-
-func loadPage() error {
-	f, err := os.Open("web/index.html")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer f.Close()
-
-	bufio.NewReader(f)
-	page, err = io.ReadAll(f)
-	return err
 }
