@@ -4,7 +4,7 @@ import (
     "github.com/niljimeno/citadel/models"
 )
 
-templ Search(results []models.Result) {
+templ Search(results []models.Result, message string) {
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -13,12 +13,14 @@ templ Search(results []models.Result) {
     </head>
     <body>
         <main>
-            <h1><a href="/">Citadel</a></h1>
+            <h1><a class="ghost" href="/">Citadel</a></h1>
             <div id="search">
                 <form action="/search" method="get">
                     <input type="text" name="search" placeholder="search" autofocus></input>
                     <input type="submit" value="Submit">
     			</form>
+
+    			<p>{message}</p>
                 <div id="results">
                     for _, result := range results {
                         <div class="result">
@@ -26,7 +28,7 @@ templ Search(results []models.Result) {
                             <a href={ "https://" + result.Site }>{ result.Site }</a>
                             <p>{ result.Desc }</p>
                             for _, tag := range result.Tags {
-                                <span class="tag">{tag}</span>
+                                <span class="tag"><a class="ghost" href={"/tag/?tag=" + tag}> {tag}</a></span>
                             }
                         </div>
                     }

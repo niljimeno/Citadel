@@ -18,10 +18,20 @@ func main() {
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/", fs)
 
-	http.HandleFunc("/search/", func(w http.ResponseWriter, r *http.Request) {
-		cmp := web.Search(repository.Search(r.URL.Query().Get("search")))
-		cmp.Render(context.Background(), w)
-	})
+	http.HandleFunc("/search/", search)
+	http.HandleFunc("/tag/", tag)
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+func search(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query().Get("search")
+	cmp := web.Search(repository.Search(query), "")
+	cmp.Render(context.Background(), w)
+}
+
+func tag(w http.ResponseWriter, r *http.Request) {
+	tag := r.URL.Query().Get("tag")
+	cmp := web.Search(repository.FilterByTag(tag), "Filtering by "+tag)
+	cmp.Render(context.Background(), w)
 }
