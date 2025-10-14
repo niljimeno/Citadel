@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/lithammer/fuzzysearch/fuzzy"
@@ -33,7 +32,6 @@ func Search(r string) []models.Result {
 
 	tagResembles := func(tags []string, query string) bool {
 		for _, tag := range tags {
-			fmt.Println(tag, query)
 			if resembles(tag, query) || resembles(query, tag) {
 				return true
 			}
