@@ -11,7 +11,6 @@ func FilterByTag(q string) []models.Result {
 	for _, r := range db {
 		if slices.Contains(r.Tags, q) {
 			results = append(results, r)
-			break
 		}
 	}
 
