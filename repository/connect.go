@@ -14,7 +14,15 @@ var db = []models.Result{}
 var tag = make(map[string]*models.Result)
 
 func Connect() error {
-	file, err := os.Open("db.csv")
+	err := tryConnect("/etc/citadel.csv")
+	if os.IsNotExist(err) {
+		err = tryConnect("citadel.csv")
+	}
+	return err
+}
+
+func tryConnect(dbPath string) error {
+	file, err := os.Open(dbPath)
 	if err != nil {
 		return err
 	}

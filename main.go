@@ -21,6 +21,7 @@ func main() {
 	http.HandleFunc("/search/", search)
 	http.HandleFunc("/tag/", tag)
 
+	log.Print("Running at port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
